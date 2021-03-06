@@ -16,11 +16,12 @@ describe 'Inject parameter into template' => sub {
   it 'Inject parameter' => sub {
     
     my $meta_class = Moose::Meta::Class->create_anon_class(attributes => [
-      data => +{
+      Moose::Meta::Attribute->new(
+        data =>
         is       => 'ro',
         isa      => Any,
         required => 1,
-      },
+      ),
     ]);
 
     my $T = T(0);
@@ -40,29 +41,32 @@ describe 'Inject parameter into template' => sub {
   it 'Inject parameter on into template' => sub {
 
     my $user_class = Moose::Meta::Class->create_anon_class(attributes => [
-      name => +{
+      Moose::Meta::Attribute->new(
+        name =>
         is       => 'ro',
         isa      => Str,
         required => 1,
-      },
+      ),
     ]);
     
     my $content_class = Moose::Meta::Class->create_anon_class(attributes => [
-      data => +{
+      Moose::Meta::Attribute->new(
+        data =>
         is       => 'ro',
         isa      => InstanceOf[$user_class->name],
         required => 1,
-      },
+      ),
     ]);
     
     my $auther_class = Moose::Meta::Class->create_anon_class(
       superclasses => [$user_class->name],
       attributes   => [
-        book_name => +{
+        Moose::Meta::Attribute->new(
+          book_name =>
           is       => 'ro',
           isa      => Str,
           required => 1,
-        },
+        ),
       ],
     );
 
@@ -85,15 +89,14 @@ describe 'Inject parameter into template' => sub {
 
   it 'Template has multiple type parameter type' => sub {
 
-    my $content_class = Moose::Meta::Class->create_anon_class(
-      attributes   => [
-        data => +{
-          is       => 'ro',
-          isa      => Tuple[Str, Str],
-          required => 1,
-        },
-      ],
-    );
+    my $content_class = Moose::Meta::Class->create_anon_class(attributes => [
+      Moose::Meta::Attribute->new(
+        data =>
+        is       => 'ro',
+        isa      => Tuple[Str, Str],
+        required => 1,
+      ),
+    ]);
 
     my $factory = Factory->new(
       name                       => 'Content',
@@ -114,15 +117,14 @@ describe 'Inject parameter into template' => sub {
 
   it 'Template has each different multiple type parameter type' => sub {
 
-    my $content_class = Moose::Meta::Class->create_anon_class(
-      attributes   => [
-        data => +{
-          is       => 'ro',
-          isa      => Tuple[Str, Str, Str],
-          required => 1,
-        },
-      ],
-    );
+    my $content_class = Moose::Meta::Class->create_anon_class(attributes => [
+      Moose::Meta::Attribute->new(
+        data =>
+        is       => 'ro',
+        isa      => Tuple[Str, Str, Str],
+        required => 1,
+      ),
+    ]);
 
     my $factory = Factory->new(
       name                       => 'Content',
@@ -149,15 +151,14 @@ describe 'Inject parameter into template' => sub {
 
   it 'Type parameter type has parameter' => sub {
 
-    my $content_class = Moose::Meta::Class->create_anon_class(
-      attributes   => [
-        data => +{
-          is       => 'ro',
-          isa      => ArrayRef,
-          required => 1,
-        },
-      ],
-    );
+    my $content_class = Moose::Meta::Class->create_anon_class(attributes => [
+      Moose::Meta::Attribute->new(
+        'data',
+        is       => 'ro',
+        isa      => ArrayRef,
+        required => 1,
+      ),
+    ]);
 
     my $factory = Factory->new(
       name                       => 'Content',
@@ -177,15 +178,14 @@ describe 'Inject parameter into template' => sub {
 
   it 'Type parameter type has type parameter type' => sub {
 
-    my $content_class = Moose::Meta::Class->create_anon_class(
-      attributes   => [
-        data => +{
-          is       => 'ro',
-          isa      => ArrayRef,
-          required => 1,
-        },
-      ],
-    );
+    my $content_class = Moose::Meta::Class->create_anon_class(attributes => [
+      Moose::Meta::Attribute->new(
+        data =>
+        is       => 'ro',
+        isa      => ArrayRef,
+        required => 1,
+      ),
+    ]);
 
     my $factory = Factory->new(
       name                       => 'Content',
@@ -205,15 +205,14 @@ describe 'Inject parameter into template' => sub {
 
   it 'Type parameter type has parameter, and the parameter has type parameter type' => sub {
 
-    my $content_class = Moose::Meta::Class->create_anon_class(
-      attributes   => [
-        data => +{
-          is       => 'ro',
-          isa      => Any,
-          required => 1,
-        },
-      ],
-    );
+    my $content_class = Moose::Meta::Class->create_anon_class(attributes => [
+      Moose::Meta::Attribute->new(
+        data =>
+        is       => 'ro',
+        isa      => Any,
+        required => 1,
+      ),
+    ]);
 
     my $factory = Factory->new(
       name                       => 'Content',
