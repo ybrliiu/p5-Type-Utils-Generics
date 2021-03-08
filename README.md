@@ -1,3 +1,4 @@
+[![Actions Status](https://github.com/ybrliiu/p5-Type-Utils-Generics/workflows/test/badge.svg)](https://github.com/ybrliiu/p5-Type-Utils-Generics/actions) [![Coverage Status](https://img.shields.io/coveralls/ybrliiu/p5-Type-Utils-Generics/master.svg?style=flat)](https://coveralls.io/r/ybrliiu/p5-Type-Utils-Generics?branch=master) [![MetaCPAN Release](https://badge.fury.io/pl/Type-Utils-Generics.svg)](https://metacpan.org/release/Type-Utils-Generics)
 # NAME
 
 Type::Utils::Generics - Create generics type easily
