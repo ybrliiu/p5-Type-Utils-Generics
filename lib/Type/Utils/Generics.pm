@@ -73,13 +73,13 @@ Type::Utils::Generics - Create generics type easily
       );
     }
     
-    my $QueueType = class_generics Queue => (
+    class_generics QueueType => (
       class_name => 'Queue',
       attributes => +{ data => ArrayRef[ T(0) ] },
     );
 
     subtest 'Queue[Str]' => sub {
-      my $QueueStrType = $QueueType->([Str]);
+      my $QueueStrType = QueueType([Str]);
       ok $QueueStrType->check( Queue->new(data => ['A']) );
       ok !$QueueStrType->check( Queue->new(data => [ +{} ]) );
       ok !$QueueStrType->check( Queue->new(data => [ (undef) x 3 ]) );
@@ -95,15 +95,6 @@ Type::Utils::Generics - Create generics type easily
     my $Find = sub_generics Find => [ ArrayRef[ T(0) ], T(0) ] => T(0);
 
     my $FindInt = $Find->(Int); # TypedCodeRef[ [ ArrayRef[Int], Int ] => Int ]
-
-    my $QueueType = class_generics Queue => (
-      class_name => 'Queue',
-      attributes => +{ data => ArrayRef[ T(0) ] },
-      methods    => +{
-        push => [ [ T(0) ] => Undef ],
-        pop  => [ [] => T(0) | Undef ],
-      },
-    );
 
 =head1 DESCRIPTION
 

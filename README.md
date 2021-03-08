@@ -4,7 +4,7 @@ Type::Utils::Generics - Create generics type easily
 
 # SYNOPSIS
 
-    use Type::Utils::Generics qw( generics T );
+    use Type::Utils::Generics qw( class_generics T );
     
     package Queue {
       use Moo;
@@ -16,7 +16,7 @@ Type::Utils::Generics - Create generics type easily
       );
     }
     
-    *QueueType = generics Queue => (
+    class_generics QueueType => (
       class_name => 'Queue',
       attributes => +{ data => ArrayRef[ T(0) ] },
     );
@@ -38,15 +38,6 @@ Type::Utils::Generics - Create generics type easily
     my $Find = sub_generics Find => [ ArrayRef[ T(0) ], T(0) ] => T(0);
 
     my $FindInt = $Find->(Int); # TypedCodeRef[ [ ArrayRef[Int], Int ] => Int ]
-
-    my $QueueType = class_generics Queue => (
-      class_name => 'Queue',
-      attributes => +{ data => ArrayRef[ T(0) ] },
-      methods    => +{
-        push => [ [ T(0) ] => Undef ],
-        pop  => [ [] => T(0) | Undef ],
-      },
-    );
 
 # DESCRIPTION
 
