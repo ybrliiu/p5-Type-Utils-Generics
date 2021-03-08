@@ -41,7 +41,6 @@ sub class_generics {
 
   if (defined $name) {
     my $caller = caller;
-    warn $caller;
     no strict 'refs';
     *{ $caller . '::' . $name } = $code;
     set_subname($name, $code);

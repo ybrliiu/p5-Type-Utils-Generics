@@ -40,33 +40,35 @@ describe 'Inject parameter into template' => sub {
 
   it 'Inject parameter on into template' => sub {
 
-    my $user_class = Moose::Meta::Class->create_anon_class(attributes => [
-      Moose::Meta::Attribute->new(
-        name =>
-        is       => 'ro',
-        isa      => Str,
-        required => 1,
-      ),
-    ]);
-    
-    my $content_class = Moose::Meta::Class->create_anon_class(attributes => [
-      Moose::Meta::Attribute->new(
-        data =>
-        is       => 'ro',
-        isa      => InstanceOf[$user_class->name],
-        required => 1,
-      ),
-    ]);
-    
-    my $auther_class = Moose::Meta::Class->create_anon_class(
-      superclasses => [$user_class->name],
-      attributes   => [
+    my $user_class = Moose::Meta::Class->create_anon_class(
+      attributes => [
         Moose::Meta::Attribute->new(
-          book_name =>
+          name =>
           is       => 'ro',
           isa      => Str,
           required => 1,
         ),
+      ]
+    );
+    
+    my $content_class = Moose::Meta::Class->create_anon_class(
+      attributes => [
+        Moose::Meta::Attribute->new(data => (
+          is       => 'ro',
+          isa      => InstanceOf[$user_class->name],
+          required => 1,
+        )),
+      ]
+    );
+    
+    my $auther_class = Moose::Meta::Class->create_anon_class(
+      superclasses => [$user_class->name],
+      attributes   => [
+        Moose::Meta::Attribute->new(book_name => (
+          is       => 'ro',
+          isa      => Str,
+          required => 1,
+        )),
       ],
     );
 
@@ -74,10 +76,10 @@ describe 'Inject parameter into template' => sub {
       name                       => 'Content',
       class_name                 => $content_class->name,
       type_template_of_attribute => +{ data => T(0) },
-      type_parameters            => [$auther_class->name],
+      type_parameters            => [ InstanceOf[$auther_class->name] ],
     );
     my $InstanceOfAuther =
-      $factory->inject_parameter_into_template( InstanceOf[$auther_class->name] );
+      $factory->inject_parameter_into_template( $factory->type_template_of_attribute->{data} );
     is $InstanceOfAuther, qq{InstanceOf["@{[ $auther_class->name ]}"]};
 
     my $user = $user_class->new_object(name => 'hoge');
@@ -85,6 +87,122 @@ describe 'Inject parameter into template' => sub {
 
     my $auther = $auther_class->new_object(name => 'fuga', book_name => 'Time is Money.');
     ok $InstanceOfAuther->check($auther);
+  };
+
+  it 'Inject parameter into union type template' => sub {
+    
+    my $content_class = Moose::Meta::Class->create_anon_class(
+      attributes => [
+        Moose::Meta::Attribute->new(data => (
+          is       => 'ro',
+          isa      => Any,
+          required => 1,
+        )),
+      ]
+    );
+
+    my $user_class = Moose::Meta::Class->create_anon_class(
+      attributes => [
+        Moose::Meta::Attribute->new(
+          name =>
+          is       => 'ro',
+          isa      => Str,
+          required => 1,
+        ),
+      ]
+    );
+    
+    my $book_class = Moose::Meta::Class->create_anon_class(
+      attributes   => [
+        Moose::Meta::Attribute->new(name => (
+          is       => 'ro',
+          isa      => Str,
+          required => 1,
+        )),
+      ],
+    );
+
+    my $factory = Factory->new(
+      name                       => 'Content',
+      class_name                 => $content_class->name,
+      type_template_of_attribute => +{ data => InstanceOf[$user_class->name] | T(0) },
+      type_parameters            => [ InstanceOf[$book_class->name] ],
+    );
+
+    my $UserOrBook =
+      $factory->inject_parameter_into_template( $factory->type_template_of_attribute->{data} );
+    is $UserOrBook, qq{InstanceOf["@{[ $user_class->name ]}"]|InstanceOf["@{[ $book_class->name ]}"]};
+
+    my $user = $user_class->new_object(name => 'hoge');
+    ok $UserOrBook->check($user);
+
+    my $book = $book_class->new_object(name => '秘密結社のつくりかた');
+    ok $UserOrBook->check($book);
+
+    ok !$UserOrBook->check(undef);
+    ok !$UserOrBook->check(755);
+    ok !$UserOrBook->check(bless +{}, $content_class->name);
+  };
+
+  it 'Inject parameter into intersection type template' => sub {
+    
+    my $content_class = Moose::Meta::Class->create_anon_class(
+      attributes => [
+        Moose::Meta::Attribute->new(data => (
+          is       => 'ro',
+          isa      => Any,
+          required => 1,
+        )),
+      ]
+    );
+
+    my $user_class = Moose::Meta::Class->create_anon_class(
+      attributes => [
+        Moose::Meta::Attribute->new(
+          name =>
+          is       => 'ro',
+          isa      => Str,
+          required => 1,
+        ),
+      ]
+    );
+    
+    my $book_class = Moose::Meta::Class->create_anon_class(
+      attributes   => [
+        Moose::Meta::Attribute->new(title => (
+          is       => 'ro',
+          isa      => Str,
+          required => 1,
+        )),
+      ],
+    );
+
+    my $factory = Factory->new(
+      name                       => 'Content',
+      class_name                 => $content_class->name,
+      type_template_of_attribute => +{ data => InstanceOf[$user_class->name] & T(0) },
+      type_parameters            => [ InstanceOf[$book_class->name] ],
+    );
+
+    my $UserAndBook =
+      $factory->inject_parameter_into_template( $factory->type_template_of_attribute->{data} );
+    is $UserAndBook, qq{InstanceOf["@{[ $user_class->name ]}"]&InstanceOf["@{[ $book_class->name ]}"]};
+
+    my $author_class = Moose::Meta::Class->create_anon_class(
+      superclasses => [ $user_class->name, $book_class->name ],
+    );
+
+    my $author = $author_class->new_object(
+      title => '秘密結社のつくりかた',
+      name  => '志摩リン',
+    );
+    ok $UserAndBook->check($author);
+
+    my $user = $user_class->new_object(name => 'hoge');
+    ok !$UserAndBook->check($user);
+
+    my $book = $book_class->new_object(title => '秘密結社のつくりかた');
+    ok !$UserAndBook->check($book);
   };
 
   it 'Template has multiple type parameter type' => sub {

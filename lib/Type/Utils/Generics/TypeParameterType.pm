@@ -7,7 +7,7 @@ use parent 'Type::Tiny';
 
 use Exporter qw( import );
 
-our @EXPORT_OK = qw( T );
+our @EXPORT_OK = qw( T TypeParameter );
 
 use Carp qw( croak );
 use Type::Params qw( multisig compile Invocant );
@@ -38,6 +38,11 @@ sub T {
     optional          => $optional,
   );
   defined $parameters ? $type->parameterize(@$parameters) : $type;
+}
+
+{
+  no warnings 'once';
+  *TypeParameter = \&T;
 }
 
 sub new {

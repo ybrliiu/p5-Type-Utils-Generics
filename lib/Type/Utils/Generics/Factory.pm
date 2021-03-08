@@ -10,6 +10,7 @@ use Scalar::Util qw( blessed );
 use Carp qw( confess );
 use Carp::Assert qw( assert DEBUG );
 use Types::Standard -types;
+use Type::Utils qw( union intersection );
 
 has name => (
   is       => 'ro',
@@ -31,7 +32,7 @@ has type_template_of_attribute => (
 
 has type_parameters => (
   is       => 'ro',
-  isa      => ArrayRef,
+  isa      => ArrayRef[ InstanceOf['Type::Tiny'] ],
   required => 1,
 );
 
@@ -53,9 +54,20 @@ sub find_type_parameter_type_from_all_template {
 
 sub find_type_parameter_type {
   my $type = shift;
-  return !!1 if $type->isa(TypeParameterType);
-  return !!0 unless $type->is_parameterized;
-  any { find_type_parameter_type($_) } $type->parameters->@*;
+  return 1 if $type->isa(TypeParameterType);
+
+  if ( $type->is_parameterized ) {
+    any { find_type_parameter_type($_) } $type->parameters->@*;
+  }
+  elsif ( $type->isa('Type::Tiny::Union') ) {
+    any { find_type_parameter_type($_) } $type->type_constraints->@*;
+  }
+  elsif ( $type->isa('Type::Tiny::Intersection') ) {
+    any { find_type_parameter_type($_) } $type->type_constraints->@*;
+  }
+  else {
+    0;
+  }
 }
 
 sub create_constraint_generator {
@@ -75,7 +87,7 @@ sub inject_parameter_into_template {
   my ($self, $template) = @_;
 
   if ( $template->isa(TypeParameterType) ) {
-    my $type_param = $self->type_parameters->[$template->type_parameter_id];
+    my $type_param = $self->type_parameters->[ $template->type_parameter_id ];
 
     unless (defined $type_param) {
       if ($template->optional) {
@@ -89,8 +101,10 @@ sub inject_parameter_into_template {
       }
     }
 
-    # 引数を受け取る型パラメータの場合
-    if ( $template->is_parameterized && blessed($type_param) && $type_param->isa('Type::Tiny') ) {
+    # e.g.) T[Int, Int]
+    if ( $template->is_parameterized ) {
+      assert $type_param->is_parameterizable if DEBUG;
+
       my @injected_type_params =
         map { $self->inject_parameter_into_template($_) }
         $template->parameters->@*;
@@ -99,16 +113,29 @@ sub inject_parameter_into_template {
     else {
       return $type_param;
     }
-  }
 
-  unless ( $template->is_parameterized ) {
+  }
+  elsif ( $template->is_parameterized ) {
+    my @injected_type_params =
+      map { $self->inject_parameter_into_template($_) }
+      $template->parameters->@*;
+    return $template->parameterized_from->parameterize(@injected_type_params);
+  }
+  elsif ( $template->isa('Type::Tiny::Union') ) {
+    my @injected_type_params =
+      map { $self->inject_parameter_into_template($_) }
+      $template->type_constraints->@*;
+    return union(\@injected_type_params);
+  }
+  elsif ( $template->isa('Type::Tiny::Intersection') ) {
+    my @injected_type_params =
+      map { $self->inject_parameter_into_template($_) }
+      $template->type_constraints->@*;
+    return intersection(\@injected_type_params);
+  }
+  else {
     return $template;
   }
-
-  my @injected_type_params =
-    map { $self->inject_parameter_into_template($_) }
-    $template->parameters->@*;
-  $template->parameterized_from->parameterize(@injected_type_params);
 }
 
 sub create {
