@@ -1,4 +1,5 @@
 requires 'perl', '5.010001';
+requires 'Sub::Util', '1.55';
 requires 'Type::Tiny', '1.010004';
 requires 'Moo', '2.004004';
 requires 'Type::Tiny', '1.010004';

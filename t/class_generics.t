@@ -1,24 +1,10 @@
-use Test2::V0 qw( ok subtest done_testing );
+use Test2::V0;
 use Types::Standard -types;
-use Type::Utils::Generics ':all';
-
-package Queue {
-  use Moo;
-  use Types::Standard -types;
-  has data => (
-    is       => 'ro',
-    isa      => ArrayRef,
-    required => 1,
-  );
-}
-
-*QueueType = generics Queue => (
-  class_name => 'Queue',
-  attributes => +{ data => ArrayRef[ T(0) ] },
-);
+use lib 't/lib';
+use Queue qw( QueueType );
 
 subtest 'Queue[Str]' => sub {
-  my $QueueStrType = QueueType([Str]);
+  my $QueueStrType = QueueType[Str];
   ok $QueueStrType->check( Queue->new(data => ['A']) );
   ok !$QueueStrType->check( Queue->new(data => [ +{} ]) );
   ok !$QueueStrType->check( Queue->new(data => [ (undef) x 3 ]) );
@@ -35,7 +21,7 @@ package User {
 }
 
 subtest 'Queue[User]' => sub {
-  my $QueueUserType = QueueType([ InstanceOf['User'] ]);
+  my $QueueUserType = QueueType[ InstanceOf['User'] ];
   ok $QueueUserType->check( Queue->new(data => [ User->new(name => '日野森雫') ]) );
   ok $QueueUserType->check( Queue->new(data => []) );
   ok !$QueueUserType->check( Queue->new(data => [1, 2]) );

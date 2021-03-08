@@ -3,33 +3,31 @@ use 5.010001;
 use strict;
 use warnings;
 use utf8;
-
 our $VERSION = '0.01';
 
 use Exporter qw( import );
-
-our @EXPORT_OK = qw( generics T );
+our @EXPORT_OK = qw( class_generics T );
 our %EXPORT_TAGS = ( all => \@EXPORT_OK );
 
-use aliased 'Type::Utils::Generics::Factory';
-use Sub::Util qw( set_prototype );
-use Type::Params qw( compile );
+use Type::Params qw( compile compile_named );
 use Types::Standard -types, qw( slurpy );
 use Type::Utils::Generics::TypeParameterType qw( T );
+use Sub::Util qw( set_subname set_prototype );
+use aliased 'Type::Utils::Generics::Factory';
 
-sub generics {
-  state $c = do {
-    my $NamedOptionsType = Dict[
-      class_name => ClassName,
-      attributes => HashRef[ InstanceOf['Type::Tiny'] ],
-    ];
-    compile(Str, slurpy $NamedOptionsType);
-  };
-  my ($name, $args) = $c->(@_);
+my $TypeContraint = HasMethods[qw( check get_message )];
+
+sub class_generics {
+  my $name = @_ % 2 == 1 ? shift : undef;
+  state $c = compile_named(
+    class_name => ClassName,
+    attributes => HashRef[$TypeContraint],
+  );
+  my $args = $c->(@_);
   my ($class_name, $type_template_of_attribute) = $args->@{qw( class_name attributes )};
 
   my $code = sub {
-    state $c = compile(ArrayRef);
+    state $c = compile(ArrayRef[$TypeContraint]);
     my ($type_parameters) = $c->(@_);
 
     my $factory = Factory->new(
@@ -40,7 +38,16 @@ sub generics {
     );
     $factory->create();
   };
-  set_prototype(';$', $code);
+
+  if (defined $name) {
+    my $caller = caller;
+    warn $caller;
+    no strict 'refs';
+    *{ $caller . '::' . $name } = $code;
+    set_subname($name, $code);
+    set_prototype(';$', $code);
+  }
+
   $code;
 }
 
@@ -55,7 +62,7 @@ Type::Utils::Generics - Create generics type easily
 
 =head1 SYNOPSIS
 
-    use Type::Utils::Generics qw( generics T );
+    use Type::Utils::Generics qw( class_generics T );
     
     package Queue {
       use Moo;
@@ -67,13 +74,13 @@ Type::Utils::Generics - Create generics type easily
       );
     }
     
-    *QueueType = generics Queue => (
+    my $QueueType = class_generics Queue => (
       class_name => 'Queue',
       attributes => +{ data => ArrayRef[ T(0) ] },
     );
 
     subtest 'Queue[Str]' => sub {
-      my $QueueStrType = QueueType([Str]);
+      my $QueueStrType = $QueueType->([Str]);
       ok $QueueStrType->check( Queue->new(data => ['A']) );
       ok !$QueueStrType->check( Queue->new(data => [ +{} ]) );
       ok !$QueueStrType->check( Queue->new(data => [ (undef) x 3 ]) );

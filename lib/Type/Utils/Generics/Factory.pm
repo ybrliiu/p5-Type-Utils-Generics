@@ -13,7 +13,7 @@ use Types::Standard -types;
 
 has name => (
   is       => 'ro',
-  isa      => Str,
+  isa      => Maybe[Str],
   required => 1,
 );
 
