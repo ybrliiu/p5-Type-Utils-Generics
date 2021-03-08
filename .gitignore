@@ -9,6 +9,7 @@
 /carton.lock
 /.carton/
 /local/
+/.carmel/
 
 nytprof.out
 nytprof/
@@ -29,3 +30,5 @@ cover_db/
 MYMETA.*
 
 /Type-Utils-Generics-*
+
+ctags
