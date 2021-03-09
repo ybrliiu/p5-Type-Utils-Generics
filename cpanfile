@@ -6,6 +6,8 @@ requires 'Type::Tiny', '1.010004';
 requires 'Carp::Assert', '0.21';
 requires 'aliased', '0.34';
 requires 'namespace::autoclean', '0.29';
+requires 'Sub::WrapInType', '0.05';
+requires 'Types::TypedCodeRef', '0.07';
 
 on 'test' => sub {
     requires 'Test2::Suite', '0.000138';

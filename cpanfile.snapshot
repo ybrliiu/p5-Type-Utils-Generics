@@ -30,6 +30,28 @@ DISTRIBUTIONS
       strict 0
       vars 0
       warnings 0
+  Class-ISA-0.36
+    pathname: S/SM/SMUELLER/Class-ISA-0.36.tar.gz
+    provides:
+      Class::ISA 0.36
+    requirements:
+      ExtUtils::MakeMaker 0
+      if 0
+  Class-InsideOut-1.14
+    pathname: D/DA/DAGOLDEN/Class-InsideOut-1.14.tar.gz
+    provides:
+      Class::InsideOut 1.14
+    requirements:
+      Carp 0
+      Class::ISA 0
+      Exporter 0
+      ExtUtils::MakeMaker 6.17
+      Scalar::Util 1.09
+      Storable 0
+      overload 0
+      perl 5.008
+      strict 0
+      vars 0
   Class-Load-0.25
     pathname: E/ET/ETHER/Class-Load-0.25.tar.gz
     provides:
@@ -942,6 +964,21 @@ DISTRIBUTIONS
       Scalar::Util 0
       strict 0
       warnings 0
+  Sub-Meta-0.07
+    pathname: K/KF/KFLY/Sub-Meta-0.07.tar.gz
+    provides:
+      Sub::Meta 0.07
+      Sub::Meta::Library 0.07
+      Sub::Meta::Param 0.07
+      Sub::Meta::Parameters 0.07
+      Sub::Meta::Returns 0.07
+    requirements:
+      Carp 0
+      Module::Build::Tiny 0.035
+      Scalar::Util 0
+      Sub::Identify 0.14
+      Sub::Util 1.50
+      perl 5.010
   Sub-Name-0.26
     pathname: E/ET/ETHER/Sub-Name-0.26.tar.gz
     provides:
@@ -962,6 +999,20 @@ DISTRIBUTIONS
       ExtUtils::MakeMaker 0
       Scalar::Util 0
       perl 5.006
+  Sub-WrapInType-0.05
+    pathname: M/MP/MPOLIIU/Sub-WrapInType-0.05.tar.gz
+    provides:
+      Sub::WrapInType 0.05
+    requirements:
+      Carp 0
+      Class::InsideOut 0
+      Exporter 0
+      Hash::Util 0
+      Module::Build::Tiny 0.035
+      Scalar::Util 0
+      Type::Tiny 1.012000
+      namespace::autoclean 0
+      perl 5.010001
   Term-Table-0.015
     pathname: E/EX/EXODIST/Term-Table-0.015.tar.gz
     provides:
@@ -1257,6 +1308,21 @@ DISTRIBUTIONS
       Exporter::Tiny 1.000000
       ExtUtils::MakeMaker 6.17
       perl 5.006001
+  Types-TypedCodeRef-0.07
+    pathname: M/MP/MPOLIIU/Types-TypedCodeRef-0.07.tar.gz
+    provides:
+      Types::TypedCodeRef 0.07
+      Types::TypedCodeRef::Factory undef
+    requirements:
+      Carp 0
+      Module::Build::Tiny 0.035
+      Moo 2.004004
+      Scalar::Util 0
+      Sub::Meta 0.05
+      Sub::WrapInType 0.05
+      Type::Tiny 1.010004
+      namespace::autoclean 0.29
+      perl 5.010001
   Variable-Magic-0.62
     pathname: V/VP/VPIT/Variable-Magic-0.62.tar.gz
     provides:
