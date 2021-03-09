@@ -77,7 +77,7 @@ sub create {
     parent               => InstanceOf[ $self->class_name ],
     name                 => $self->name,
     name_generator       => sub {
-      $self->name . '[' . join(', ', $self->type_parameters->@*) . ']';
+      $self->name . '[' . join(', ', @{ $self->type_parameters }) . ']';
     },
     constraint_generator => $self->create_constraint_generator(),
   );

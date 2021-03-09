@@ -25,7 +25,7 @@ sub class_generics {
     attributes => HashRef[$TypeContraint],
   );
   my $args = $check->(@_);
-  my ($class_name, $type_template_of_attribute) = $args->@{qw( class_name attributes )};
+  my ($class_name, $type_template_of_attribute) = @$args{qw( class_name attributes )};
 
   my $code = sub {
     # TODO: optional has been accepted?
