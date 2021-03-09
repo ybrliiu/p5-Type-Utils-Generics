@@ -35,8 +35,43 @@ jobs:
         env:
           HARNESS_PERL_SWITCHES: '-MDevel::Cover=+ignore,^local/|^t/'
         run: carton exec -- prove -lrv t
-      - name: Webhook
+      - name: Notify success
+        if: success()
         uses: joelwmale/webhook-action@master
         with:
           url: ${{ secrets.WEBHOOK_URL }}
-          body: '{"text": "test"}'
+          body: >-
+            {
+               "attachments":[
+                  {
+                     "fallback": "Success: ${{ github.repository_owner }}'s workflow in ${{ github.repository }}",
+                     "color": "#28A745",
+                     "fields": [
+                        {
+                           "title": "Success: ${{ github.repository_owner }}'s workflow in ${{ github.repository }} (\${{ github.ref }})",
+                           "value": "Detail: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+                        }
+                     ]
+                  }
+               ]
+            }
+      - name: Notify failure
+        if: failure()
+        uses: joelwmale/webhook-action@master
+        with:
+          url: ${{ secrets.WEBHOOK_URL }}
+          body: >-
+            {
+               "attachments":[
+                  {
+                     "fallback": "Failure: ${{ github.repository_owner }}'s workflow in ${{ github.repository }}",
+                     "color": "#CB2431",
+                     "fields": [
+                        {
+                           "title": "Failure: ${{ github.repository_owner }}'s workflow in ${{ github.repository }} (\${{ github.ref }})",
+                           "value": "Detail: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+                        }
+                     ]
+                  }
+               ]
+            }
