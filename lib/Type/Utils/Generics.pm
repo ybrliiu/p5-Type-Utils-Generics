@@ -13,7 +13,7 @@ use Type::Params qw( compile compile_named );
 use Types::Standard -types, qw( slurpy );
 use Type::Utils::Generics::TypeParameterType qw( T );
 use Sub::Util qw( set_subname set_prototype );
-use aliased 'Type::Utils::Generics::Factory';
+use aliased 'Type::Utils::Generics::Class';
 
 my $TypeContraint = HasMethods[qw( check get_message )];
 
@@ -30,7 +30,7 @@ sub class_generics {
     state $c = compile(ArrayRef[$TypeContraint]);
     my ($type_parameters) = $c->(@_);
 
-    my $factory = Factory->new(
+    my $factory = Class->new(
       name                       => $name,
       class_name                 => $class_name,
       type_template_of_attribute => $type_template_of_attribute,

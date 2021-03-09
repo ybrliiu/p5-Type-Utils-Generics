@@ -1,4 +1,4 @@
-package Type::Utils::Generics::Factory;
+package Type::Utils::Generics::Class;
 use 5.010001;
 use Moo;
 use utf8;
