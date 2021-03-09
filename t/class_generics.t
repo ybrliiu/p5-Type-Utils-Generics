@@ -10,7 +10,8 @@ subtest 'Queue[Str]' => sub {
   ok !$QueueStrType->check( Queue->new(data => [ (undef) x 3 ]) );
 };
 
-package User {
+{
+  package User;
   use Moo;
   use Types::Standard -types;
   has name => (
