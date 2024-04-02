@@ -167,11 +167,11 @@ DISTRIBUTIONS
       overload 0
       strict 0
       warnings 0
-  Exporter-Tiny-1.002001
-    pathname: T/TO/TOBYINK/Exporter-Tiny-1.002001.tar.gz
+  Exporter-Tiny-1.006002
+    pathname: T/TO/TOBYINK/Exporter-Tiny-1.006002.tar.gz
     provides:
-      Exporter::Shiny 1.002001
-      Exporter::Tiny 1.002001
+      Exporter::Shiny 1.006002
+      Exporter::Tiny 1.006002
     requirements:
       ExtUtils::MakeMaker 6.17
       perl 5.006001
@@ -324,7 +324,7 @@ DISTRIBUTIONS
       File::Spec 3.00
       File::Spec::Functions 0
       if 0
-      perl 5.00503
+      perl 5.005030
       strict 0
   Module-Runtime-0.016
     pathname: Z/ZE/ZEFRAM/Module-Runtime-0.016.tar.gz
@@ -1030,89 +1030,6 @@ DISTRIBUTIONS
       List::Util 0
       Scalar::Util 0
       perl 5.008001
-  Test-Simple-1.302183
-    pathname: E/EX/EXODIST/Test-Simple-1.302183.tar.gz
-    provides:
-      Test2 1.302183
-      Test2::API 1.302183
-      Test2::API::Breakage 1.302183
-      Test2::API::Context 1.302183
-      Test2::API::Instance 1.302183
-      Test2::API::InterceptResult 1.302183
-      Test2::API::InterceptResult::Event 1.302183
-      Test2::API::InterceptResult::Facet 1.302183
-      Test2::API::InterceptResult::Hub 1.302183
-      Test2::API::InterceptResult::Squasher 1.302183
-      Test2::API::Stack 1.302183
-      Test2::Event 1.302183
-      Test2::Event::Bail 1.302183
-      Test2::Event::Diag 1.302183
-      Test2::Event::Encoding 1.302183
-      Test2::Event::Exception 1.302183
-      Test2::Event::Fail 1.302183
-      Test2::Event::Generic 1.302183
-      Test2::Event::Note 1.302183
-      Test2::Event::Ok 1.302183
-      Test2::Event::Pass 1.302183
-      Test2::Event::Plan 1.302183
-      Test2::Event::Skip 1.302183
-      Test2::Event::Subtest 1.302183
-      Test2::Event::TAP::Version 1.302183
-      Test2::Event::V2 1.302183
-      Test2::Event::Waiting 1.302183
-      Test2::EventFacet 1.302183
-      Test2::EventFacet::About 1.302183
-      Test2::EventFacet::Amnesty 1.302183
-      Test2::EventFacet::Assert 1.302183
-      Test2::EventFacet::Control 1.302183
-      Test2::EventFacet::Error 1.302183
-      Test2::EventFacet::Hub 1.302183
-      Test2::EventFacet::Info 1.302183
-      Test2::EventFacet::Info::Table 1.302183
-      Test2::EventFacet::Meta 1.302183
-      Test2::EventFacet::Parent 1.302183
-      Test2::EventFacet::Plan 1.302183
-      Test2::EventFacet::Render 1.302183
-      Test2::EventFacet::Trace 1.302183
-      Test2::Formatter 1.302183
-      Test2::Formatter::TAP 1.302183
-      Test2::Hub 1.302183
-      Test2::Hub::Interceptor 1.302183
-      Test2::Hub::Interceptor::Terminator 1.302183
-      Test2::Hub::Subtest 1.302183
-      Test2::IPC 1.302183
-      Test2::IPC::Driver 1.302183
-      Test2::IPC::Driver::Files 1.302183
-      Test2::Tools::Tiny 1.302183
-      Test2::Util 1.302183
-      Test2::Util::ExternalMeta 1.302183
-      Test2::Util::Facets2Legacy 1.302183
-      Test2::Util::HashBase 1.302183
-      Test2::Util::Trace 1.302183
-      Test::Builder 1.302183
-      Test::Builder::Formatter 1.302183
-      Test::Builder::IO::Scalar 2.114
-      Test::Builder::Module 1.302183
-      Test::Builder::Tester 1.302183
-      Test::Builder::Tester::Color 1.302183
-      Test::Builder::Tester::Tie 1.302183
-      Test::Builder::TodoDiag 1.302183
-      Test::More 1.302183
-      Test::Simple 1.302183
-      Test::Tester 1.302183
-      Test::Tester::Capture 1.302183
-      Test::Tester::CaptureRunner 1.302183
-      Test::Tester::Delegate 1.302183
-      Test::use::ok 1.302183
-      ok 1.302183
-    requirements:
-      ExtUtils::MakeMaker 0
-      File::Spec 0
-      File::Temp 0
-      Scalar::Util 1.13
-      Storable 0
-      perl 5.006002
-      utf8 0
   Test2-Suite-0.000138
     pathname: E/EX/EXODIST/Test2-Suite-0.000138.tar.gz
     provides:
@@ -1260,54 +1177,64 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
-  Type-Tiny-1.012001
-    pathname: T/TO/TOBYINK/Type-Tiny-1.012001.tar.gz
+  Type-Tiny-2.004000
+    pathname: T/TO/TOBYINK/Type-Tiny-2.004000.tar.gz
     provides:
-      Devel::TypeTiny::Perl56Compat 1.012001
-      Devel::TypeTiny::Perl58Compat 1.012001
-      Error::TypeTiny 1.012001
-      Error::TypeTiny::Assertion 1.012001
-      Error::TypeTiny::Compilation 1.012001
-      Error::TypeTiny::WrongNumberOfParameters 1.012001
-      Eval::TypeTiny 1.012001
-      Reply::Plugin::TypeTiny 1.012001
-      Test::TypeTiny 1.012001
-      Type::Coercion 1.012001
-      Type::Coercion::FromMoose 1.012001
-      Type::Coercion::Union 1.012001
-      Type::Library 1.012001
-      Type::Params 1.012001
-      Type::Parser 1.012001
-      Type::Parser::AstBuilder undef
-      Type::Parser::Token undef
-      Type::Parser::TokenStream undef
-      Type::Registry 1.012001
-      Type::Tiny 1.012001
-      Type::Tiny::Class 1.012001
-      Type::Tiny::ConstrainedObject 1.012001
-      Type::Tiny::Duck 1.012001
-      Type::Tiny::Enum 1.012001
-      Type::Tiny::Intersection 1.012001
-      Type::Tiny::Role 1.012001
-      Type::Tiny::Union 1.012001
-      Type::Utils 1.012001
-      Types::Common::Numeric 1.012001
-      Types::Common::String 1.012001
-      Types::Standard 1.012001
-      Types::Standard::ArrayRef 1.012001
-      Types::Standard::CycleTuple 1.012001
-      Types::Standard::Dict 1.012001
-      Types::Standard::HashRef 1.012001
-      Types::Standard::Map 1.012001
-      Types::Standard::ScalarRef 1.012001
-      Types::Standard::StrMatch 1.012001
-      Types::Standard::Tied 1.012001
-      Types::Standard::Tuple 1.012001
-      Types::TypeTiny 1.012001
+      Devel::TypeTiny::Perl58Compat 2.004000
+      Error::TypeTiny 2.004000
+      Error::TypeTiny::Assertion 2.004000
+      Error::TypeTiny::Compilation 2.004000
+      Error::TypeTiny::WrongNumberOfParameters 2.004000
+      Eval::TypeTiny 2.004000
+      Eval::TypeTiny::CodeAccumulator 2.004000
+      Reply::Plugin::TypeTiny 2.004000
+      Test::TypeTiny 2.004000
+      Type::Coercion 2.004000
+      Type::Coercion::FromMoose 2.004000
+      Type::Coercion::Union 2.004000
+      Type::Library 2.004000
+      Type::Params 2.004000
+      Type::Params::Alternatives 2.004000
+      Type::Params::Parameter 2.004000
+      Type::Params::Signature 2.004000
+      Type::Parser 2.004000
+      Type::Parser::AstBuilder 2.004000
+      Type::Parser::Token 2.004000
+      Type::Parser::TokenStream 2.004000
+      Type::Registry 2.004000
+      Type::Tie 2.004000
+      Type::Tie::ARRAY 2.004000
+      Type::Tie::BASE 2.004000
+      Type::Tie::HASH 2.004000
+      Type::Tie::SCALAR 2.004000
+      Type::Tiny 2.004000
+      Type::Tiny::Bitfield 2.004000
+      Type::Tiny::Class 2.004000
+      Type::Tiny::ConstrainedObject 2.004000
+      Type::Tiny::Duck 2.004000
+      Type::Tiny::Enum 2.004000
+      Type::Tiny::Intersection 2.004000
+      Type::Tiny::Role 2.004000
+      Type::Tiny::Union 2.004000
+      Type::Utils 2.004000
+      Types::Common 2.004000
+      Types::Common::Numeric 2.004000
+      Types::Common::String 2.004000
+      Types::Standard 2.004000
+      Types::Standard::ArrayRef 2.004000
+      Types::Standard::CycleTuple 2.004000
+      Types::Standard::Dict 2.004000
+      Types::Standard::HashRef 2.004000
+      Types::Standard::Map 2.004000
+      Types::Standard::ScalarRef 2.004000
+      Types::Standard::StrMatch 2.004000
+      Types::Standard::Tied 2.004000
+      Types::Standard::Tuple 2.004000
+      Types::TypeTiny 2.004000
     requirements:
-      Exporter::Tiny 1.000000
+      Exporter::Tiny 1.006000
       ExtUtils::MakeMaker 6.17
-      perl 5.006001
+      perl 5.008001
   Types-TypedCodeRef-0.07
     pathname: M/MP/MPOLIIU/Types-TypedCodeRef-0.07.tar.gz
     provides:

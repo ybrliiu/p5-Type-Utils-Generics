@@ -28,8 +28,7 @@ sub class_generics {
   my ($class_name, $type_template_of_attribute) = @$args{qw( class_name attributes )};
 
   my $code = sub {
-    # TODO: optional has been accepted?
-    state $c = compile(ArrayRef[$TypeContraint]);
+    state $c = compile(ArrayRef[$TypeContraint], { default => sub { [] } });
     my ($type_parameters) = $c->(@_);
 
     my $factory = Class->new(
