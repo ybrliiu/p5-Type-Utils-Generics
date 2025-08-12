@@ -1,8 +1,7 @@
 requires 'perl', '5.010001';
 requires 'Sub::Util', '1.55';
-requires 'Type::Tiny', '1.010004';
 requires 'Moo', '2.004004';
-requires 'Type::Tiny', '2.004000';
+requires 'Type::Tiny', '2.008000';
 requires 'Carp::Assert', '0.21';
 requires 'aliased', '0.34';
 requires 'namespace::autoclean', '0.29';

@@ -1,78 +1,53 @@
 name: test
-
 on:
   push:
-    branches: [master]
+    branches:
+      - master
   pull_request:
-    branches: [master]
-
 jobs:
-  test:
-    name: Run Test with Perl ${{ matrix.perl }}
+  build:
     runs-on: ubuntu-latest
     strategy:
-      fail-fast: false
       matrix:
         perl:
-          - '5.10'
-          - '5.32'
+          [
+            "5.40",
+            "5.38",
+            "5.36",
+            "5.34",
+            "5.32",
+            "5.30",
+            "5.28",
+            "5.26",
+            "5.24",
+            "5.22",
+            "5.20",
+            "5.18",
+            "5.16",
+            "5.14",
+          ]
+        include:
+          - perl: 5.40
+            coverage: true
+    name: Perl ${{ matrix.perl }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Setup perl
         uses: shogo82148/actions-setup-perl@v1
         with:
           perl-version: ${{ matrix.perl }}
-      - name: Cache local files
-        uses: actions/cache@v2
-        with:
-          path: ./local
-          key: ${{ runner.os }}-perl-${{ matrix.perl }}-${{ hashFiles('./cpanfile.snapshot') }}
-      - name: Coveralls
-        uses: mihyaeru21/actions-report-coveralls-perl@v1
-        with:
-          flag-name: perl-${{ matrix.perl }}
-      - run: carton install
-      - name: Run tests
+
+      - name: Install dependencies
+        run: cpm install -g --with-all
+      - run: perl Build.PL
+      - run: ./Build
+      - run: ./Build test
+
+      - name: Run coverage
+        if: ${{ matrix.coverage }}
         env:
-          HARNESS_PERL_SWITCHES: '-MDevel::Cover=+ignore,^local/|^t/'
-        run: carton exec -- prove -lrv t
-      - name: Notify success
-        if: success()
-        uses: joelwmale/webhook-action@master
-        with:
-          url: ${{ secrets.WEBHOOK_URL }}
-          body: >-
-            {
-               "attachments":[
-                  {
-                     "fallback": "Success: ${{ github.repository_owner }}'s workflow in ${{ github.repository }}",
-                     "color": "#28A745",
-                     "fields": [
-                        {
-                           "title": "Success: ${{ github.repository_owner }}'s workflow in ${{ github.repository }} (\${{ github.ref }})",
-                           "value": "Detail: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-                        }
-                     ]
-                  }
-               ]
-            }
-      - name: Notify failure
-        if: failure()
-        uses: joelwmale/webhook-action@master
-        with:
-          url: ${{ secrets.WEBHOOK_URL }}
-          body: >-
-            {
-               "attachments":[
-                  {
-                     "fallback": "Failure: ${{ github.repository_owner }}'s workflow in ${{ github.repository }}",
-                     "color": "#CB2431",
-                     "fields": [
-                        {
-                           "title": "Failure: ${{ github.repository_owner }}'s workflow in ${{ github.repository }} (\${{ github.ref }})",
-                           "value": "Detail: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-                        }
-                     ]
-                  }
-               ]
-            }
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cpm install -g Devel::Cover::Report::Coveralls
+          cover -test -report coveralls -ignore_re '^local/lib/perl5'
+
