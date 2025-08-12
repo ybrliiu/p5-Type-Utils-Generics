@@ -46,7 +46,7 @@ jobs:
       - name: Run coverage
         if: ${{ matrix.coverage }}
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.COVERALLS_TOKEN }}
         run: |
           cpm install -g Devel::Cover::Report::Coveralls
           cover -test -report coveralls -ignore_re '^local/lib/perl5'
