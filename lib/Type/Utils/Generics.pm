@@ -9,7 +9,7 @@ use Exporter qw( import );
 our @EXPORT_OK = qw( class_generics sub_generics T TypeParameter );
 our %EXPORT_TAGS = ( all => \@EXPORT_OK );
 
-use Type::Params qw( compile compile_named multisig );
+use Type::Params qw( signature );
 use Types::Standard -types, qw( slurpy );
 use Type::Utils::Generics::TypeParameterType qw( T TypeParameter );
 use Sub::Util qw( set_subname set_prototype );
@@ -20,15 +20,17 @@ my $TypeContraint = HasMethods[qw( check get_message )];
 
 sub class_generics {
   my $name = @_ % 2 == 1 ? shift : undef;
-  state $check = compile_named(
-    class_name => ClassName,
-    attributes => HashRef[$TypeContraint],
+  state $check = signature(
+    named_to_list => 1,
+    named => [
+      class_name => ClassName,
+      attributes => HashRef[$TypeContraint],
+    ],
   );
-  my $args = $check->(@_);
-  my ($class_name, $type_template_of_attribute) = @$args{qw( class_name attributes )};
+  my ($class_name, $type_template_of_attribute) = $check->(@_);
 
   my $code = sub {
-    state $c = compile(ArrayRef[$TypeContraint], { default => sub { [] } });
+    state $c = signature(positional => [ ArrayRef[$TypeContraint], { default => sub { [] } } ]);
     my ($type_parameters) = $c->(@_);
 
     my $factory = Class->new(
@@ -58,25 +60,27 @@ sub sub_generics {
     my $TypeConstraint = InstanceOf['Type::Tiny'];
     my $ParamsTypes    = $TypeConstraint | ArrayRef[$TypeConstraint] | HashRef[$TypeConstraint];
     my $ReturnTypes    = $TypeConstraint | ArrayRef[$TypeConstraint];
-    multisig(
-      +{ message => << 'EOS' },
+    signature(
+      message => << 'EOS',
 USAGE: sub_generics(\@parameter_types, $return_types)
     or sub_generics(params => \@params_types, returns => $return_types)
 EOS
-      [ $ParamsTypes, $ReturnTypes ],
-      compile_named(
-        params => $ParamsTypes,
-        isa    => $ReturnTypes,
-      ),
+      multi => [
+        +{ positional => [ $ParamsTypes, $ReturnTypes ] },
+        +{
+          named_to_list => 1,
+          named => [
+            params => $ParamsTypes,
+            isa    => $ReturnTypes,
+          ],
+        },
+      ]
     );
   };
-  my ($params_types, $return_types) = do {
-    my @args = $check->(@_);
-    ${^TYPE_PARAMS_MULTISIG} == 0 ? @args : @{ $args[0] }{qw( params isa )};
-  };
+  my ($params_types, $return_types) = $check->(@_);
 
   my $code = sub {
-    state $c = compile(ArrayRef[$TypeContraint]);
+    state $c = signature(positional => [ ArrayRef[$TypeContraint] ]);
     my ($type_parameters) = $c->(@_);
 
     my $factory = Subroutine->new(

@@ -10,21 +10,23 @@ use Exporter qw( import );
 our @EXPORT_OK = qw( T TypeParameter );
 
 use Carp qw( croak );
-use Type::Params qw( multisig compile Invocant );
-use Types::Standard -types, qw( slurpy );
+use Type::Params qw( signature Invocant );
+use Types::Standard -types, qw( Slurpy );
 
 sub T {
-  state $c = multisig(
-    [ Int ],
-    [ Int, ArrayRef ],
-    [ Int, slurpy Dict[ parameters => Optional[ArrayRef], optional => Optional[Bool] ] ],
+  state $c = signature(
+    multi => [
+      [ Int ],
+      [ Int, ArrayRef ],
+      [ Int, Slurpy[ Dict[ parameters => Optional[ArrayRef], optional => Optional[Bool] ] ] ],
+    ],
   );
   my ($type_parameter_id, $parameters, $optional) = do {
     my @args = $c->(@_);
-    if (${^TYPE_PARAMS_MULTISIG} == 0) {
+    if (${^_TYPE_PARAMS_MULTISIG} == 0) {
       ($args[0], undef, 0);
     }
-    elsif (${^TYPE_PARAMS_MULTISIG} == 1) {
+    elsif (${^_TYPE_PARAMS_MULTISIG} == 1) {
       ($args[0], $args[1], 0);
     }
     else {
@@ -46,11 +48,14 @@ sub T {
 }
 
 sub new {
-  state $c = compile(
-    Invocant,
-    slurpy Dict[
-      type_parameter_id => Str,
-      optional          => Bool,
+  state $c = signature(
+    method => Invocant,
+    positional => [
+      Dict[
+        type_parameter_id => Str,
+        optional          => Bool,
+      ],
+      +{ slurpy => 1 },
     ],
   );
   my ($class, $args) = $c->(@_);
